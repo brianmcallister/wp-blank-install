@@ -2,6 +2,9 @@
 # W3 Total Cache.
 # define('WP_CACHE', getenv('ENVIRONMENT') === 'production' ? true : false);
 
+# Misc.
+define('DISALLOW_FILE_EDIT', true);
+
 # Site URLs
 define('WP_HOME', 'http://' . $_SERVER['HTTP_HOST']);
 define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/wp/');
@@ -9,6 +12,14 @@ define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/wp/');
 # Local configuration file.
 if (file_exists(dirname(__FILE__) . '/local-config.php')) {
   include(dirname(__FILE__) . '/local-config.php');
+}
+
+# Local revision file.
+if (file_exists(dirname(__FILE__) . '/REVISION')) {
+  $rev = file_get_contents(dirname(__FILE__) . '/REVISION');
+  define('REVISION', $rev);
+} else {
+  define('REVISION', '');
 }
 
 # Custom content directory.
@@ -25,16 +36,6 @@ define('DB_HOST', DB_HOST);
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 
-# Salts: https://api.wordpress.org/secret-key/1.1/salt/
-define('AUTH_KEY',         '');
-define('SECURE_AUTH_KEY',  '');
-define('LOGGED_IN_KEY',    '');
-define('NONCE_KEY',        '');
-define('AUTH_SALT',        '');
-define('SECURE_AUTH_SALT', '');
-define('LOGGED_IN_SALT',   '');
-define('NONCE_SALT',       '');
-
 # Prefix.
 $table_prefix  = 'wp_';
 
@@ -42,12 +43,7 @@ $table_prefix  = 'wp_';
 define('WPLANG', '');
 
 # Debug.
-define('WP_DEBUG', getenv('ENVIRONMENT') === 'production' ? false : true);
-
-# ABSPATH constant.
-if (!defined('ABSPATH')) {
-  define('ABSPATH', dirname(__FILE__) . '/wp/');
-}
+define('WP_DEBUG', ENV === 'production' ? false : true);
 
 # Go.
 require_once(ABSPATH . 'wp-settings.php');

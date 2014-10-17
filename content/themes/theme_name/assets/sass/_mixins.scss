@@ -1,0 +1,115 @@
+// Maintain ratio mixin. Great for responsive grids, or videos.
+// Responsive mixins.
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: nth($breakpoint-tablet, 1)) and (max-width: nth($breakpoint-tablet, 2)) {
+    @include with-layout(6) {
+      @content;
+    }
+  } 
+}
+
+@mixin phone {
+  @media (max-width: $breakpoint-phone) {
+    @content;
+  }
+}
+
+@mixin breakpoint($break) {
+  @media ($break) {
+    @content;
+  }
+}
+
+// https://gist.github.com/brianmcallister/2932463
+// 
+// $ratio - Ratio the element needs to maintain.
+// 
+// Examples
+// 
+//   // A 16:9 ratio would look like this:
+//   .element {
+//     @include maintain-ratio(16 9);
+//   }
+@mixin maintain-ratio($ratio: 1 1) {
+  @if length($ratio) < 2 or length($ratio) > 2 {
+    @warn '$ratio must be a list with two values.';
+  }
+
+  $width: 100%;
+  $height: percentage(nth($ratio, 2) / nth($ratio, 1));
+  
+  width: $width;
+  height: 0;
+  padding-bottom: $height;
+}
+
+// Print position coords only.
+// https://gist.github.com/brianmcallister/3641867
+// 
+// $values - Position values. Null values get skipped over.
+@mixin pos-coords($values: null null null null) {
+  $position-list: top right bottom left;
+  $count: 1;
+  
+  @if length($values) == 1 and $values == 'reset' {
+    $values: auto auto auto auto;
+  }
+  
+  @each $value in $values {
+    @if $value == 'auto' or $value != null {
+      $pos: nth($position-list, $count);
+      #{$pos}: $value;
+    }
+    $count: $count + 1;
+  }
+}
+
+// Reset position coords mixin.
+@mixin reset-coords() {
+  @include pos-coords('reset');
+}
+
+// Position mixin.
+// 
+// $type     - Position type.
+// $values   - List of position values. Null values get skipped over.
+// $z-index  - Optional z-index value.
+@mixin position($type: relative, $values: null null null null, $z-index: '') {
+  position: $type;
+  
+  @if $type != 'static' and $type != 'inherit' {
+    @include pos-coords($values);
+    
+    @if $z-index != '' {
+      z-index: $z-index;
+    }
+  }
+}
+
+// Size mixin.
+// https://gist.github.com/brianmcallister/3659524
+// 
+// $width  - Element width, with units.
+// $height - Optional height of the element. Expects units, ex: 5px.
+//           Defaults to null.
+@mixin size($width, $height: null) {
+  width: $width;
+  
+  @if $height {
+    height: $height;
+  } @else {
+    height: $width;
+  }
+}

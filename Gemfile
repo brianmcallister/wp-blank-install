@@ -1,25 +1,16 @@
-source "http://rubygems.org"
+source 'https://rubygems.org'
 
-group :development do
-  # Rake.
-  gem "rake", "~> 10.0.3"
-  
-  # Guard
-  gem "guard", "~> 1.6.1"
-  gem "rb-fsevent", "~> 0.9.1"
-
-  # Guard plugins.
-  gem "guard-livereload", "~> 1.1.3"
-  gem "guard-compass", :git => "https://github.com/guard/guard-compass.git"
-  gem "guard-coffeescript", "~> 1.2.1"
-  
-  # CSS.
-  gem "compass", "~> 0.13.alpha.0"
-  gem "sass", "~> 3.2.5"
-  gem "susy", "~> 1.0.5"
-  
-  # Capistrano.
-  gem "capistrano", "~> 2.14.2"
-  gem "capistrano-ext", "~> 1.2.1"
-  gem "railsless-deploy", "~> 1.0.2"
-end
+gem 'rake', '10.3.2'
+gem 'guard', '2.6.1'
+gem 'coffee-script-source', '1.8.0'
+gem 'guard-livereload', '2.3.1'
+gem 'guard-coffeescript', '1.4.0'
+gem 'guard-coffeelint', :git => 'git@github.com:Ahalogy/guard-coffeelint.git'
+gem 'guard-ejs', '0.0.1'
+gem 'guard-compass', '1.1.0'
+gem 'sass', '3.4.5'
+gem 'compass', '1.0.1'
+gem 'susy', '2.1.3'
+gem 'image_optim', '0.17.1'
+gem 'scss-lint', '0.29.0'
+gem 'sass-globbing', '1.1.1'

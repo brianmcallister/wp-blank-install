@@ -1,6 +1,13 @@
+# Misc.
+.tm_properties
+
 # Config
 local-config.php
 config/config.yml
+config/deploy.yml
+
+# Composer
+vendor
 
 # Build
 build
@@ -12,6 +19,7 @@ databases
 .htaccess
 
 # Wordpress
+wp
 content/uploads/
 content/advanced-cache.php
 content/wp-cache-config.php
@@ -20,6 +28,11 @@ content/cache/
 content/backups/
 sitemap.xml
 sitemap.xml.gz
+
+# Ignore all plugins except the premium ACF plugins. v5 of ACF will support
+# composer so we can remove these lines then.
+content/plugins/*
+!content/plugins/acf-*
 
 # W3 Total Cache
 content/db.php
@@ -33,7 +46,8 @@ content/themes/*/assets/css
 
 # Generated JavaScript
 content/themes/*/assets/js/*.js
-!content/themes/*/assets/js/libs/
+content/themes/*/assets/js/*/*.js
+!content/themes/*/assets/js/libs/*.js
 
 # Logs
 *.log

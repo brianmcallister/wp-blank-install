@@ -1,0 +1,14 @@
+---
+linters:
+  ColorKeyword:
+    enabled: false
+  EmptyLineBetweenBlocks:
+    enabled: false
+  FinalNewline:
+    enabled: false
+  SelectorDepth:
+    max_depth: 4
+  
+  # TODO: Fix these.
+  PropertySortOrder:
+    enabled: false
