@@ -1,24 +1,24 @@
 require 'psych'
 
-config = Psych.load(File.read('config/config.yml'))
+config = Psych.load(File.read('config/theme.yml'))
+theme = "content/themes/#{config[:theme][:name]}"
+assets = "#{theme}/assets"
 
-cs_input = "content/themes/#{config['themename']}/#{config['coffeescript']['in']}"
-cs_output = "content/themes/#{config['themename']}/#{config['coffeescript']['out']}"
+guard :coffeescript,
+  input: "#{assets}/coffee",
+  output: "#{assets}/js",
+  all_on_start: true,
+  error_to_js: true
 
-# Guard::CoffeeScript
-guard 'coffeescript', :input => cs_input, :output => cs_output, :all_on_start => true, :error_to_js => true
+guard :compass,
+  compile_on_start: true
 
-# Guard::Compass
-guard 'compass', :compile_on_start => true
+guard :ejs,
+  input: "#{assets}/templates",
+  output: "#{assets}/js/templates.js"
 
-# Guard::LiveReload
-guard 'livereload' do
-  # Generated assets.
-  watch(%r{content/themes/#{config['themename']}/assets/(css|js)/.+\.(css|js)})
-  
-  # Other assets.
-  watch(%r{content/themes/#{config['themename']}/assets/(images|fonts)/.+\.(.*)})
-  
-  # Theme files.
-  watch(%r{content/themes/#{config['themename']}/.+\.php})
+guard :livereload do
+  watch %r{#{assets}/(css|js)/.+\.(css|js)}
+  watch %r{#{assets}/(img|fonts)/.*\.(.*)}
+  watch %r{#{theme}/.*\.php}
 end

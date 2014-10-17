@@ -1,0 +1,9 @@
+:staging:
+  :user: ''
+  :host: ''
+  :directory: ''
+
+:production:
+  :user: ''
+  :host: ''
+  :directory: ''

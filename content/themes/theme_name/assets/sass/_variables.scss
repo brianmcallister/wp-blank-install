@@ -1,0 +1,50 @@
+// Variables.
+// Responsive breakpoints.
+$breakpoint-phone: 480px;
+$breakpoint-tablet: 481px 800px;
+$breakpoint-mobile: 800px;
+$breakpoint-desktop: 801px;
+
+// Transitions.
+$transition-default: .2s;
+$transition-slow: .5s;
+$transition-fast: .1s;
+
+// Easing.
+$ease-in-out-back: cubic-bezier(.680, -.550, .265, 1.550);
+
+// Type.
+$sans-stack: sans-serif;
+$serif-stack: georgia, serif;
+$primary-stack: $sans-stack;
+$secondary-stack: $sans-stack;
+
+// Susy setup.
+$susy: (
+  columns: 12,
+  column-width: 80px,
+  grid-padding: 20px,
+  gutters: 1/4
+);
+
+$susy-debugging: false !default;
+
+$debug-susy: (
+  debug: (
+    image: show,
+    color: rgba(#00f, .2),
+    output: background,
+    toggle: bottom left
+  )
+);
+
+@if $susy-debugging {
+  $susy: map-merge($susy, $debug-susy) !global;
+}
+
+// Colors.
+
+// Palette.
+$primary: null;
+$secondary: null;
+$tertiary: null;

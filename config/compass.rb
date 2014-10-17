@@ -1,44 +1,67 @@
-# Require any additional compass plugins here.
+require 'psych'
 require 'susy'
+require 'sass-globbing'
+
+config = ::Psych.load(File.read('config/theme.yml'))
+theme = "content/themes/#{config[:theme][:name]}"
 
 http_path  = '/'
-project_name = ''
-asset_path = "content/themes/#{project_name}/assets"
-
-css_dir = if environment == :production
-  "build/#{asset_path}/css"
-else
-  "#{asset_path}/css"
-end
+asset_path = "#{theme}/assets"
+compile_path = (environment == :production) ? "build/#{asset_path}" : asset_path
 
 sass_dir        = "#{asset_path}/sass"
-images_dir      = "#{asset_path}/images"
-javascripts_dir = "#{asset_path}/js"
-fonts_dir       = "#{asset_path}/fonts"
 
-# Enable debug info to use source maps. Works in Chrome Dev Tools.
-sass_options = {:debug_info => true}
+css_dir         = "#{compile_path}/css"
+images_dir      = "#{compile_path}/img"
+javascripts_dir = "#{compile_path}/js"
+fonts_dir       = "#{compile_path}/fonts"
 
-# You can select your preferred output style here (can be overridden via the command line):
-# output_style = :expanded or :nested or :compact or :compressed
 output_style = (environment == :production) ? :compressed : :expanded
-
-# To enable relative paths to assets via compass helper functions. Uncomment:
 relative_assets = true
 
-module Sass::Script::Functions
-  # Public: Get the name of the project, which is the directory this site
-  #         is being accessed at.
-  #
-  # Examples
-  #
-  #   If this project is being accessed at http://0.0.0.0/app/
-  #
-  #   @debug project()
-  #   # => 'app'
-  #
-  # Returns the project name.
-  def project
-    Sass::Script::String.new(project_name)
+sass_options = {
+  :custom => {
+    images_dir: images_dir,
+  }
+}
+
+if environment == :production
+  asset_cache_buster do |http_path, real_path|
+    pathname = Pathname.new(http_path)
+    file_hash = Digest::MD5.file(real_path).hexdigest[0...7]
+    new_path = "#{pathname.dirname}/#{pathname.basename(pathname.extname)}-#{file_hash}#{pathname.extname}"
+    
+    {:path => new_path, :query => nil}
   end
+end
+
+module Sass::Script::Functions
+  # Custom Sass function to get a list of images in a directory.
+  # https://gist.github.com/brianmcallister/5824102
+  #
+  # path - Directory in which to get svg images. Defaults to a blank string.
+  #
+  # Returns a list of images.
+  def get_svg_images(path = Sass::Script::String.new(''))
+    assert_type path, :String
+  
+    files = []
+  
+    dir = if path.value === ''
+      "#{@options[:custom][:images_dir]}/*.svg"
+    else
+      "#{@options[:custom][:images_dir]}/#{path.value}/*.svg"
+    end
+  
+    Dir.glob(dir).each do |f|
+      # Make sure that there's also a .png version of the .svg file. We need
+      # the .png to measure images sizes.
+      if File.exists? f.gsub('.svg', '.png')
+        files << Sass::Script::String.new(File.basename(f).gsub!('.svg', ''))
+      end
+    end
+
+    return Sass::Script::List.new(files, :comma)
+  end
+  declare :get_svg_images, %w(:path)
 end

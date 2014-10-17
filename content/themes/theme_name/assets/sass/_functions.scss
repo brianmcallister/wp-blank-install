@@ -1,0 +1,47 @@
+// Functions
+@function em($px, $base: 16px) {
+  @return ($px / $base) * 1em;
+}
+
+// Convert a ratio into a percentage. Useful for responsive images and videos.
+//
+// $ratio - 2 item list of integers. Represents a ratio. Defaults to 1:1.
+//
+// Examples
+//
+//   ratio-as-percentage();
+//   #=> 100%
+//
+//   ratio-as-percentage(16 9);
+//   #=> 56.25%
+//
+// Returns a percent value.
+@function ratio-as-percentage($ratio: 1 1) {
+  @if length($ratio) < 2 or length($ratio) > 2 {
+    @warn '$ratio must be a list with two values.';
+  }
+  
+  @return percentage(nth($ratio, 2) / nth($ratio, 1));
+}
+
+// Extract values from a nested map.
+//
+// $map - Map from which to extract the value.
+// $keys - List of keys.
+//
+// Examples
+//
+//    $map: (one: (two: val: 'value'));
+//    map-me($map, one two val);
+//    #=> 'value'
+//
+// Returns the requested value.
+@function map-me($map, $keys) {
+  @each $key in $keys {
+    @if map-has-key($map, $key) {
+      $map: map-get($map, $key);
+    }
+  }
+
+  @return $map;
+}
